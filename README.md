@@ -31,12 +31,12 @@ An object containing the lzo error codes as seen below.
 
 ## Methods
 #### compress(data)
-*data* can be anything, as long as it has a 'toString' function. Buffers however, are passed directly.  
-Returns the compressed data in form of a Buffer. The length of that data can just be read via its `length` property.
+*data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+Returns the compressed data in form of a Buffer. The compressed length can just be read via its `length` property.
 
 #### decompress(data)
-*data* can be anything, as long as it has a 'toString' function. Buffers however, are passed directly.  
-Returns the decompressed data in form of a Buffer. The length of that data can just be read via its `length` property.
+*data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+Returns the decompressed data in form of a Buffer.
 
 ## Errors
 Code | Description
