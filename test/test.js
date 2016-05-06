@@ -24,9 +24,9 @@ describe('Decompression', () => {
 });
 
 describe('Version Stuff', () => {
-	it('Should have a version string', () => 
+	it('Should have property \'version\'', () => 
 		expect(lzo).to.have.ownProperty('version') );
 
-	it('Should have a version date', () => 
+	it('Should have property \'versionDate\'', () => 
 		expect(lzo).to.have.ownProperty('versionDate') );
 });
