@@ -1,0 +1,19 @@
+{
+  "name": "lzo",
+  "version": "0.1.0",
+  "description": "node.js bindings for lzo compression",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "schroffl",
+  "license": "MIT",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "~1.2.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
+}
