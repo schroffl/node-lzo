@@ -63,5 +63,6 @@ module.exports = {
 	},
 
 	'version': lzo.version,
-	'versionDate': lzo.versionDate
+	'versionDate': lzo.versionDate,
+	'errors': errCodes
 };

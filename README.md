@@ -20,9 +20,13 @@ console.log(decompressed.toString());
 
 ## Properties
 #### version
-The version of [LZO](http://www.oberhumer.com/opensource/lzo/) being used.  
+The version of [LZO](http://www.oberhumer.com/opensource/lzo/) being used.
+
 #### versionDate
 The date on which the version was released.
+
+#### errors
+An object containing the lzo error codes as seen below.
 
 
 ## Methods

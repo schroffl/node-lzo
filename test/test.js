@@ -23,10 +23,13 @@ describe('Decompression', () => {
 		expect(() => lzo.decompress(compressed)).to.not.throw() );
 });
 
-describe('Version Stuff', () => {
+describe('Properties', () => {
 	it('Should have property \'version\'', () => 
 		expect(lzo).to.have.ownProperty('version') );
 
 	it('Should have property \'versionDate\'', () => 
 		expect(lzo).to.have.ownProperty('versionDate') );
+
+	it('Should have property \'errors\' (lzo error codes)', () =>
+		expect(lzo).to.have.ownProperty('errors') );
 });
