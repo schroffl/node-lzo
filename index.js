@@ -15,10 +15,18 @@ const errCodes = {
 	'-11': 'LZO_E_INVALID_ALIGNMENT',
 	'-12': 'LZO_E_OUTPUT_NOT_CONSUMED',
 	'-99': 'LZO_E_INTERNAL_ERROR',
-	'-128': 'ERR_INIT_FAILED - lzo_init() failed'
+	'-128': 'ERR_LZO_INIT_FAILED - lzo_init() failed'
 };
 
 module.exports = {
+
+	/**
+		Compress data with the lzo compression algorithm
+
+		@param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+
+		@return {Buffer} The compressed data
+	*/
 	'compress': input => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
@@ -31,6 +39,14 @@ module.exports = {
 		else
 			return output.slice(0, result.len);
 	},
+
+	/**
+		Decompress lzo-compressed data
+
+		@param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+
+		@return {Buffer} The decompressed data
+	*/
 	'decompress': input => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
@@ -43,6 +59,7 @@ module.exports = {
 		else
 			return output.slice(0, result.len);
 	},
+
 	'version': lzo.version,
 	'versionDate': lzo.versionDate
 };
