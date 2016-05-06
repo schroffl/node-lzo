@@ -1,6 +1,8 @@
 'use strict';
 
 const lzo = require('bindings')('node_lzo');
+
+// LZO error codes from lzoconf.h
 const errCodes = { 
 	'-1': 'LZO_E_ERROR',
 	'-2': 'LZO_E_OUT_OF_MEMORY',
@@ -15,7 +17,7 @@ const errCodes = {
 	'-11': 'LZO_E_INVALID_ALIGNMENT',
 	'-12': 'LZO_E_OUTPUT_NOT_CONSUMED',
 	'-99': 'LZO_E_INTERNAL_ERROR',
-	'-128': 'ERR_LZO_INIT_FAILED - lzo_init() failed'
+	'-128': 'ERR_LZO_INIT_FAILED - lzo_init() failed' // Custom error, since LZO doesn't have a predefined one...
 };
 
 module.exports = {
