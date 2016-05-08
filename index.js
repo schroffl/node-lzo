@@ -29,11 +29,11 @@ module.exports = {
 
 		@return {Buffer} The compressed data
 	*/
-	'compress': input => {
+	'compress': (input, length) => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
 
-		let output = new Buffer(input.length + (input.length / 16) + 64 + 3),
+		let output = new Buffer(length || (input.length + (input.length / 16) + 64 + 3)),
 			result = lzo.compress(input, output);
 
 		if(result.err !== 0)
@@ -49,11 +49,11 @@ module.exports = {
 
 		@return {Buffer} The decompressed data
 	*/
-	'decompress': input => {
+	'decompress': (input, length) => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
 
-		let output = new Buffer(input.length * 3),
+		let output = new Buffer(length || (input.length * 3)),
 			result = lzo.decompress(input, output);
 
 		if(result.err !== 0)

@@ -30,12 +30,14 @@ An object containing the lzo error codes as seen below.
 
 
 ## Methods
-#### compress(data)
+#### compress(data, *length*)
 *data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+If you specify a *length*, the function will allocate that much memory for the compressed data.  
 Returns the compressed data in form of a Buffer. The compressed length can just be read via its `length` property.
 
-#### decompress(data)
+#### decompress(data, *length*)
 *data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+If you specify a *length*, the function will allocate that much memory for the decompressed data. I suggest you to do so whenever you know the length.  
 Returns the decompressed data in form of a Buffer.
 
 ## Errors
