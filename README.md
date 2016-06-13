@@ -1,5 +1,5 @@
 # node-lzo [![npm version](https://badge.fury.io/js/lzo.svg)](https://badge.fury.io/js/lzo)
-Node.js Bindings for [LZO](http://www.oberhumer.com/opensource/lzo/)
+Node.js Bindings for [LZO Compression](http://www.oberhumer.com/opensource/lzo/)
 
 ## Example
 ```javascript
