@@ -23,12 +23,12 @@ const errCodes = {
 module.exports = {
 
 	/**
-		Compress data with the lzo compression algorithm
-
-		@param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
-
-		@return {Buffer} The compressed data
-	*/
+	 * Compress data with the lzo compression algorithm
+	 *
+	 * @param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+	 *
+	 * @return {Buffer} The compressed data
+	 */
 	'compress': (input, length) => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
@@ -43,12 +43,12 @@ module.exports = {
 	},
 
 	/**
-		Decompress lzo-compressed data
-
-		@param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
-
-		@return {Buffer} The decompressed data
-	*/
+	 * Decompress lzo-compressed data
+	 *
+	 * @param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+	 *
+	 * @return {Buffer} The decompressed data
+	 */
 	'decompress': (input, length) => {
 		if(!(input instanceof Buffer))
 			input = new Buffer(input.toString());
