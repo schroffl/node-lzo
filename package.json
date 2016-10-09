@@ -1,11 +1,11 @@
 {
   "name": "lzo",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "node.js bindings for lzo compression",
   "main": "index.js",
-  "repository" : { 
-    "type" : "git", 
-    "url" : "https://github.com/schroffl/node-lzo.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schroffl/node-lzo.git"
   },
   "scripts": {
     "test": "mocha test"
