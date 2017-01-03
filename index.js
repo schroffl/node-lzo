@@ -33,7 +33,7 @@ module.exports = {
 		if(!Buffer.isBuffer(input))
 			input = Buffer.from(input);
 
-		let output = Buffer.allocUnsafe(length || (input.length + (input.length / 16) + 64 + 3)),
+		let output = Buffer.alloc(length || (input.length + (input.length / 16) + 64 + 3)),
 			result = lzo.compress(input, output);
 
 		if(result.err !== 0)
@@ -53,7 +53,7 @@ module.exports = {
 		if(!Buffer.isBuffer(input))
 			input = Buffer.from(input);
 
-		let output = Buffer.allocUnsafe(length || (input.length * 3)),
+		let output = Buffer.alloc(length || (input.length * 3)),
 			result = lzo.decompress(input, output);
 
 		if(result.err !== 0)
