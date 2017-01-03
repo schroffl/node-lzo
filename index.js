@@ -25,15 +25,15 @@ module.exports = {
 	/**
 	 * Compress data with the lzo compression algorithm
 	 *
-	 * @param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+	 * @param {Buffer} input - If the parameter is not a buffer, the function will try to convert via `Buffer.from`
 	 *
 	 * @return {Buffer} The compressed data
 	 */
 	'compress': (input, length) => {
-		if(!(input instanceof Buffer))
-			input = new Buffer(input.toString());
+		if(!Buffer.isBuffer(input))
+			input = Buffer.from(input);
 
-		let output = new Buffer(length || (input.length + (input.length / 16) + 64 + 3)),
+		let output = Buffer.allocUnsafe(length || (input.length + (input.length / 16) + 64 + 3)),
 			result = lzo.compress(input, output);
 
 		if(result.err !== 0)
@@ -45,15 +45,15 @@ module.exports = {
 	/**
 	 * Decompress lzo-compressed data
 	 *
-	 * @param input - Anything, as long as it has a 'toString' function. Buffers are passed directly.
+	 * @param {Buffer} input - If the parameter is not a buffer, the function will try to convert via `Buffer.from`
 	 *
 	 * @return {Buffer} The decompressed data
 	 */
 	'decompress': (input, length) => {
-		if(!(input instanceof Buffer))
-			input = new Buffer(input.toString());
+		if(!Buffer.isBuffer(input))
+			input = Buffer.from(input);
 
-		let output = new Buffer(length || (input.length * 3)),
+		let output = Buffer.allocUnsafe(length || (input.length * 3)),
 			result = lzo.decompress(input, output);
 
 		if(result.err !== 0)
