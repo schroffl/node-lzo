@@ -7,7 +7,7 @@ const lzo = require('lzo');
 
 console.log('Current version:', lzo.version, '-', lzo.versionDate);
 
-let str = 'I am a test string, an awesome test string. Wohooo!',
+let str = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
     compressed = lzo.compress(str);
 
 console.log('Original Length:', str.length, '-- Compressed length:', compressed.length);
@@ -31,14 +31,14 @@ An object containing the lzo error codes as seen below.
 
 ## Methods
 #### compress(data, *length*)
-*data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+If *data* is not a Buffer, the function will try to convert it via `Buffer.from`.
 If you specify a *length*, the function will allocate that much memory for the compressed data.  
-Returns the compressed data in form of a Buffer. The compressed length can just be read via its `length` property.
+Returns the compressed data as a Buffer.
 
 #### decompress(data, *length*)
-*data* can be anything, as long as it can be converted to a String. Buffers however, are passed directly.  
+If *data* is not a Buffer, the function will try to convert it via `Buffer.from`.
 If you specify a *length*, the function will allocate that much memory for the decompressed data. I suggest you to do so whenever you know the length.  
-Returns the decompressed data in form of a Buffer.
+Returns the decompressed data as a Buffer.
 
 ## Errors
 Code | Description

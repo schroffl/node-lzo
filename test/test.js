@@ -5,22 +5,26 @@ const lzo = require('../index');
 
 const expect = chai.expect;
 
-let compressed;
+let string = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
+	compressed;
 
 describe('Compression', () => {
 	it('Should throw if nothing is passed', () => 
-		expect(() => lzo.compress()).to.throw(TypeError)  );
+		expect(() => lzo.compress()).to.throw() );
 
-	it('Should properly compress and not throw', () => 
-		expect(() => (compressed = lzo.compress('Please don\'t throw!')) ).to.not.throw() );
+	it('Should properly compress and not throw', () => {
+		expect(() => {
+			compressed = lzo.compress(string)
+		}).to.not.throw();
+	});
 });
 
 describe('Decompression', () => {
 	it('Should throw if nothing is passed', () => 
-		expect(() => lzo.decompress()).to.throw(TypeError)  );
+		expect(() => lzo.decompress()).to.throw() );
 
-	it('Should properly decompress and not throw', () => 
-		expect(() => lzo.decompress(compressed)).to.not.throw() );
+	it('Should properly decompress and not throw', () =>
+		expect(lzo.decompress(compressed).toString()).to.equal(string) );
 });
 
 describe('Properties', () => {
