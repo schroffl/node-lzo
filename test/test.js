@@ -5,7 +5,7 @@ const lzo = require('../index');
 
 const expect = chai.expect;
 
-let string = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
+let data = Buffer.allocUnsafe(10000),
 	compressed;
 
 describe('Compression', () => {
@@ -14,7 +14,7 @@ describe('Compression', () => {
 
 	it('Should properly compress and not throw', () => {
 		expect(() => {
-			compressed = lzo.compress(string)
+			compressed = lzo.compress(data)
 		}).to.not.throw();
 	});
 });
@@ -24,7 +24,7 @@ describe('Decompression', () => {
 		expect(() => lzo.decompress()).to.throw() );
 
 	it('Should properly decompress and not throw', () =>
-		expect(lzo.decompress(compressed).toString()).to.equal(string) );
+		expect( data.compare(lzo.decompress(compressed)) ).to.equal(0) );
 });
 
 describe('Properties', () => {
