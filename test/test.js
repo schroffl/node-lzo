@@ -6,7 +6,7 @@ const lzo = require('../index');
 
 const expect = chai.expect;
 
-let data = crypto.randomBytes(Math.floor(Math.random() * 500)),
+let data = crypto.randomBytes(100),
 		compressed;
 
 describe('Compression', () => {
