@@ -1,12 +1,13 @@
 'use strict';
 
 const chai = require('chai');
+const crypto = require('crypto');
 const lzo = require('../index');
 
 const expect = chai.expect;
 
-let data = Buffer.allocUnsafe(10000),
-	compressed;
+let data = crypto.randomBytes(Math.floor(Math.random() * 500)),
+		compressed;
 
 describe('Compression', () => {
 	it('Should throw if nothing is passed', () => 
