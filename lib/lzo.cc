@@ -18,7 +18,7 @@ int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len,
     if (lzo_init() != LZO_E_OK)
         return ERR_INIT_FAILED;
 
-	return lzo1x_1_compress(input, in_len, output, &out_len, wrkmem);
+    return lzo1x_1_compress(input, in_len, output, &out_len, wrkmem);
 }
 
 lzo_uint decompress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
