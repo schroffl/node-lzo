@@ -29,12 +29,12 @@ module.exports = {
 	 *
 	 * @return {Buffer} The compressed data
 	 */
-	'compress': (input, length) => {
+	'compress': (input) => {
 		if(!Buffer.isBuffer(input))
 			input = Buffer.from(input);
 
-		let output = Buffer.alloc(length || (input.length + (input.length / 16) + 64 + 3)),
-			result = lzo.compress(input, output);
+		let output = Buffer.alloc(input.length + (input.length / 16) + 64 + 3),
+				result = lzo.compress(input, output);
 
 		if(result.err !== 0)
 			throw new Error('Compression failed with code: ' + errCodes[result.err]);
