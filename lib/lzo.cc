@@ -7,18 +7,19 @@
 
 #include <node_buffer.h>
 
-#define HEAP_ALLOC(var,size) \
-    lzo_align_t __LZO_MMODEL var [ ((size) + (sizeof(lzo_align_t) - 1)) / sizeof(lzo_align_t) ]
-
-static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
-
 using namespace v8;
 
 int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
     if (lzo_init() != LZO_E_OK)
         return ERR_INIT_FAILED;
 
-    return lzo1x_1_compress(input, in_len, output, &out_len, wrkmem);
+    char* wrkmem = (char*) malloc(LZO1X_1_MEM_COMPRESS);
+
+    int result = lzo1x_1_compress(input, in_len, output, &out_len, wrkmem);
+
+    free(wrkmem);
+
+    return result;
 }
 
 lzo_uint decompress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {

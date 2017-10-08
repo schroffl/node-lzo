@@ -1,6 +1,6 @@
 'use strict';
 
-const lzo = require('bindings')('node_lzo');
+const binding = require('bindings')('node_lzo');
 
 // LZO error codes from lzoconf.h
 const errCodes = { 
@@ -34,7 +34,7 @@ module.exports = {
       input = Buffer.from(input);
 
     let output = Buffer.alloc(input.length + (input.length / 16) + 64 + 3),
-        result = lzo.compress(input, output);
+        result = binding.compress(input, output);
 
     if(result.err !== 0)
       throw new Error('Compression failed with code: ' + errCodes[result.err]);
@@ -54,7 +54,7 @@ module.exports = {
       input = Buffer.from(input);
 
     let output = Buffer.alloc(length || (input.length * 3)),
-      result = lzo.decompress(input, output);
+      result = binding.decompress(input, output);
 
     if(result.err !== 0)
       throw new Error('Decompression failed with code: ' + errCodes[result.err]);
@@ -62,7 +62,7 @@ module.exports = {
       return output.slice(0, result.len);
   },
 
-  'version': lzo.version,
-  'versionDate': lzo.versionDate,
+  'version': binding.version,
+  'versionDate': binding.versionDate,
   'errors': errCodes
 };
