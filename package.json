@@ -8,7 +8,11 @@
     "url": "https://github.com/schroffl/node-lzo.git"
   },
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "configure": "node-gyp configure",
+    "build": "node-gyp build",
+    "clean": "node-gyp clean",
+    "rebuild": "node-gyp rebuild"
   },
   "author": "schroffl",
   "license": "MIT",
