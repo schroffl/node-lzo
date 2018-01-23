@@ -2,6 +2,7 @@
 
 #include <node.h>
 #include <v8.h>
+#include <sstream>
 
 #define ERR_INIT_FAILED (-128)
 
@@ -10,9 +11,6 @@
 using namespace v8;
 
 int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
-    if (lzo_init() != LZO_E_OK)
-        return ERR_INIT_FAILED;
-
     char* wrkmem = (char*) malloc(LZO1X_1_MEM_COMPRESS);
 
     int result = lzo1x_1_compress(input, in_len, output, &out_len, wrkmem);
@@ -23,16 +21,12 @@ int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len,
 }
 
 lzo_uint decompress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
-    if (lzo_init() != LZO_E_OK)
-        return ERR_INIT_FAILED;
-    else {
-        int r = lzo1x_decompress(input, in_len, output, &out_len, NULL);
+    int r = lzo1x_decompress(input, in_len, output, &out_len, NULL);
 
-        if (r == LZO_E_OK)
-            return out_len;
-        else
-            return r;
-    }
+    if (r == LZO_E_OK)
+        return out_len;
+    else
+        return r;
 }
 
 void js_compress(const v8::FunctionCallbackInfo<Value>& args) {
@@ -91,6 +85,21 @@ void js_decompress(const v8::FunctionCallbackInfo<Value>& args) {
 
 void Init(Handle<Object> exports) {
     Isolate *isolate = Isolate::GetCurrent();
+
+    int init_result = lzo_init();
+
+    if(init_result != LZO_E_OK) {
+        std::stringstream ss;
+
+        ss << "lzo_init() failed and returned `" << init_result << "`. ";
+        ss << "Please report this on GitHub: https://github.com/schroffl/node-lzo/issues";
+
+        Local<String> err = String::NewFromUtf8(isolate, ss.str().c_str());
+
+        isolate->ThrowException(Exception::Error(err));
+
+        return;
+    }
 
     // Compression
     exports->Set(String::NewFromUtf8(isolate, "compress"),
