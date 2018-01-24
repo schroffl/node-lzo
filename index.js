@@ -16,8 +16,7 @@ const errCodes = {
   '-10': 'LZO_E_INVALID_ARGUMENT',
   '-11': 'LZO_E_INVALID_ALIGNMENT',
   '-12': 'LZO_E_OUTPUT_NOT_CONSUMED',
-  '-99': 'LZO_E_INTERNAL_ERROR',
-  '-128': 'ERR_LZO_INIT_FAILED - lzo_init() failed' // Custom error, since LZO doesn't have a predefined one...
+  '-99': 'LZO_E_INTERNAL_ERROR'
 };
 
 module.exports = {

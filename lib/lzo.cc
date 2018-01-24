@@ -4,8 +4,6 @@
 #include <v8.h>
 #include <sstream>
 
-#define ERR_INIT_FAILED (-128)
-
 #include <node_buffer.h>
 
 using namespace v8;
