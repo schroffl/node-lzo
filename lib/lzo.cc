@@ -21,7 +21,7 @@ int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len,
 }
 
 lzo_uint decompress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
-    int r = lzo1x_decompress(input, in_len, output, &out_len, NULL);
+    int r = lzo1x_decompress_safe(input, in_len, output, &out_len, NULL);
 
     if (r == LZO_E_OK)
         return out_len;
