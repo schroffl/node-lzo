@@ -28,7 +28,7 @@ lzo_uint decompress(const unsigned char *input, unsigned char *output, lzo_uint 
 }
 
 void js_compress(const v8::FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = Isolate::GetCurrent();
+    Isolate* isolate = args.GetIsolate();
     HandleScope scope(isolate);
 
     Handle<Object> inputBuffer = args[0]->ToObject();
@@ -54,7 +54,7 @@ void js_compress(const v8::FunctionCallbackInfo<Value>& args) {
 }
 
 void js_decompress(const v8::FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = Isolate::GetCurrent();
+    Isolate* isolate = args.GetIsolate();
     HandleScope scope(isolate);
 
     Handle<Object> inputBuffer = args[0]->ToObject();
@@ -81,8 +81,8 @@ void js_decompress(const v8::FunctionCallbackInfo<Value>& args) {
     args.GetReturnValue().Set(ret);
 }
 
-void Init(Handle<Object> exports) {
-    Isolate *isolate = Isolate::GetCurrent();
+void Init(Local<Object> exports, Local<Context> context) {
+    Isolate* isolate = context->GetIsolate();
 
     int init_result = lzo_init();
 
@@ -116,4 +116,7 @@ void Init(Handle<Object> exports) {
         String::NewFromUtf8(isolate, lzo_version_date()));
 }
 
-NODE_MODULE(node_lzo, Init);
+// Initialize this addon to be context-aware.
+NODE_MODULE_INIT(/* exports, module, context */) {
+    Init(exports, context);
+}

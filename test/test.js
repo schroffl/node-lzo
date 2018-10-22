@@ -14,10 +14,10 @@ const randChar = () => String.fromCharCode(Math.random() * 1000);
 const toBuf = a => Buffer.from(a);
 
 describe('Compression/Decompression', () => {
-  it('lzo.compress should throw if nothing is passed', () => 
+  it('lzo.compress should throw if nothing is passed', () =>
     expect(() => lzo.decompress()).to.throw() );
 
-  it('lzo.decompress throw if nothing is passed', () => 
+  it('lzo.decompress throw if nothing is passed', () =>
     expect(() => lzo.decompress()).to.throw() );
 
   it('Decompressed date should be the same as the initial input', () => {
@@ -30,12 +30,21 @@ describe('Compression/Decompression', () => {
 });
 
 describe('Properties', () => {
-  it('Should have property \'version\'', () => 
+  it('Should have property \'version\'', () =>
     expect(lzo).to.have.ownProperty('version') );
 
-  it('Should have property \'versionDate\'', () => 
+  it('Should have property \'versionDate\'', () =>
     expect(lzo).to.have.ownProperty('versionDate') );
 
   it('Should have property \'errors\' (lzo error codes)', () =>
     expect(lzo).to.have.ownProperty('errors') );
+});
+
+describe('Module loaded in multiple contexts', () => {
+  it('Should not throw an error when module is loaded multiple times', () => {
+    delete require.cache[require.resolve('..')];
+    delete require.cache[require.resolve('../build/Release/node_lzo.node')];
+    const lzo2 = require('..');
+    expect(() => lzo2.compress(toBuf(arr(sampleSize)))).to.not.throw();
+  });
 });
