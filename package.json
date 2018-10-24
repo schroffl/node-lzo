@@ -1,6 +1,6 @@
 {
   "name": "lzo",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "node.js bindings for lzo compression",
   "main": "index.js",
   "repository": {
