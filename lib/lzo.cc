@@ -116,7 +116,12 @@ void Init(Local<Object> exports, Local<Context> context) {
         String::NewFromUtf8(isolate, lzo_version_date()));
 }
 
-// Initialize this addon to be context-aware.
-NODE_MODULE_INIT(/* exports, module, context */) {
-    Init(exports, context);
-}
+#if NODE_MAJOR_VERSION >= 10
+  // Initialize this addon to be context-aware. See Issue #11
+  NODE_MODULE_INIT(/* exports, module, context */) {
+      Init(exports, context);
+  }
+#else
+  // For backwards compatibility. See Issue #13
+  NODE_MODULE(node_lzo, Init)
+#endif
