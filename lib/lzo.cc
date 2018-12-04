@@ -116,7 +116,7 @@ void Init(Local<Object> exports, Local<Context> context) {
         String::NewFromUtf8(isolate, lzo_version_date()));
 }
 
-#if NODE_MAJOR_VERSION >= 10
+#if NODE_MAJOR_VERSION >= 10 && NODE_MINOR_VERSION >= 7
   // Initialize this addon to be context-aware. See Issue #11
   NODE_MODULE_INIT(/* exports, module, context */) {
       Init(exports, context);
