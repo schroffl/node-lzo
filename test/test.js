@@ -40,11 +40,20 @@ describe('Properties', () => {
     expect(lzo).to.have.ownProperty('errors') );
 });
 
-describe('Module loaded in multiple contexts', () => {
-  it('Should not throw an error when module is loaded multiple times', () => {
-    delete require.cache[require.resolve('..')];
-    delete require.cache[require.resolve('../build/Release/node_lzo.node')];
-    const lzo2 = require('..');
-    expect(() => lzo2.compress(toBuf(arr(sampleSize)))).to.not.throw();
+function compareVersion(major, minor) {
+  let version = process.version.slice(1),
+      parts = version.split('.').map(n => parseInt(n, 10));
+
+  return parts[0] >= major && parts[1] >= minor;
+}
+
+if (compareVersion(10, 7)) {
+  describe('Module loaded in multiple contexts (Node >= v10.7.x)', () => {
+    it('Should not throw an error when module is loaded multiple times', () => {
+      delete require.cache[require.resolve('..')];
+      delete require.cache[require.resolve('../build/Release/node_lzo.node')];
+      const lzo2 = require('..');
+      expect(() => lzo2.compress(toBuf(arr(sampleSize)))).to.not.throw();
+    });
   });
-});
+}
