@@ -6,6 +6,21 @@
 
 #include <node_buffer.h>
 
+#define GET_FUNCTION(A, B, C) FunctionTemplate::New(A, B)->GetFunction()
+#define MAKE_STRING(A, B) String::NewFromUtf8(A, B)
+
+#if NODE_MAJOR_VERSION >= 12
+#define NODE_12
+
+#undef GET_FUNCTION
+#define GET_FUNCTION(A, B, C) FunctionTemplate::New(A, B)->GetFunction(C).ToLocalChecked()
+
+#undef MAKE_STRING
+#define MAKE_STRING(A, B) String::NewFromUtf8(A, B, NewStringType::kNormal).ToLocalChecked()
+#endif
+
+#define NEW_API (NODE_MAJOR_VERSION >= 10)
+
 using namespace v8;
 
 int compress(const unsigned char *input, unsigned char *output, lzo_uint in_len, lzo_uint& out_len) {
@@ -31,8 +46,14 @@ void js_compress(const v8::FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
     HandleScope scope(isolate);
 
+#if NEW_API
+    Local<Context> context = isolate->GetCurrentContext();
+    Local<Object> inputBuffer = args[0]->ToObject(context).ToLocalChecked();
+    Local<Object> outputBuffer = args[1]->ToObject(context).ToLocalChecked();
+#else
     Handle<Object> inputBuffer = args[0]->ToObject();
     Handle<Object> outputBuffer = args[1]->ToObject();
+#endif
 
     lzo_uint input_len = node::Buffer::Length(inputBuffer);
     lzo_uint output_len = node::Buffer::Length(outputBuffer);
@@ -44,11 +65,13 @@ void js_compress(const v8::FunctionCallbackInfo<Value>& args) {
 
     Local<Object> ret = Object::New(isolate);
 
-    ret->Set(String::NewFromUtf8(isolate, "err"),
-        Number::New(isolate, result));
-
-    ret->Set(String::NewFromUtf8(isolate, "len"),
-        Number::New(isolate, (int) output_len) );
+#ifdef NODE_12
+    (void) ret->Set(context, MAKE_STRING(isolate, "err"), Number::New(isolate, result));
+    (void) ret->Set(context, MAKE_STRING(isolate, "len"), Number::New(isolate, (int) output_len));
+#else
+    ret->Set(MAKE_STRING(isolate, "err"), Number::New(isolate, result));
+    ret->Set(MAKE_STRING(isolate, "len"), Number::New(isolate, (int) output_len));
+#endif
 
     args.GetReturnValue().Set(ret);
 }
@@ -57,8 +80,14 @@ void js_decompress(const v8::FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
     HandleScope scope(isolate);
 
+#if NEW_API
+    Local<Context> context = isolate->GetCurrentContext();
+    Local<Object> inputBuffer = args[0]->ToObject(context).ToLocalChecked();
+    Local<Object> outputBuffer = args[1]->ToObject(context).ToLocalChecked();
+#else
     Handle<Object> inputBuffer = args[0]->ToObject();
     Handle<Object> outputBuffer = args[1]->ToObject();
+#endif
 
     lzo_uint input_len = node::Buffer::Length(inputBuffer);
     lzo_uint output_len = node::Buffer::Length(outputBuffer);
@@ -72,11 +101,13 @@ void js_decompress(const v8::FunctionCallbackInfo<Value>& args) {
 
     Local<Object> ret = Object::New(isolate);
 
-    ret->Set(String::NewFromUtf8(isolate, "err"),
-        Number::New(isolate, err));
-
-    ret->Set(String::NewFromUtf8(isolate, "len"),
-        Number::New(isolate, (int) len) );
+#ifdef NODE_12
+    (void) ret->Set(context, MAKE_STRING(isolate, "err"), Number::New(isolate, err));
+    (void) ret->Set(context, MAKE_STRING(isolate, "len"), Number::New(isolate, (int) len) );
+#else
+    ret->Set(MAKE_STRING(isolate, "err"), Number::New(isolate, err));
+    ret->Set(MAKE_STRING(isolate, "len"), Number::New(isolate, (int) len) );
+#endif
 
     args.GetReturnValue().Set(ret);
 }
@@ -92,7 +123,7 @@ void Init(Local<Object> exports, Local<Context> context) {
         ss << "lzo_init() failed and returned `" << init_result << "`. ";
         ss << "Please report this on GitHub: https://github.com/schroffl/node-lzo/issues";
 
-        Local<String> err = String::NewFromUtf8(isolate, ss.str().c_str());
+        Local<String> err = MAKE_STRING(isolate, ss.str().c_str());
 
         isolate->ThrowException(Exception::Error(err));
 
@@ -100,23 +131,37 @@ void Init(Local<Object> exports, Local<Context> context) {
     }
 
     // Compression
-    exports->Set(String::NewFromUtf8(isolate, "compress"),
-        FunctionTemplate::New(isolate, js_compress)->GetFunction());
+    (void) exports->Set(
+        context,
+        MAKE_STRING(isolate, "compress"),
+        GET_FUNCTION(isolate, js_compress, context)
+    );
 
     // Decompression
-    exports->Set(String::NewFromUtf8(isolate, "decompress"),
-        FunctionTemplate::New(isolate, js_decompress)->GetFunction());
+    (void) exports->Set(
+        context,
+        MAKE_STRING(isolate, "decompress"),
+        GET_FUNCTION(isolate, js_decompress, context)
+    );
 
     // Current lzo version
-    exports->Set(String::NewFromUtf8(isolate, "version"),
-        String::NewFromUtf8(isolate, lzo_version_string()));
+    const char *version = lzo_version_string();
+    (void) exports->Set(
+        context,
+        MAKE_STRING(isolate, "version"),
+        MAKE_STRING(isolate, version)
+    );
 
     // Date for current lzo version
-    exports->Set(String::NewFromUtf8(isolate, "versionDate"),
-        String::NewFromUtf8(isolate, lzo_version_date()));
+    const char *date = lzo_version_date();
+    (void) exports->Set(
+        context,
+        MAKE_STRING(isolate, "versionDate"),
+        MAKE_STRING(isolate, date)
+    );
 }
 
-#if NODE_MAJOR_VERSION >= 10 && NODE_MINOR_VERSION >= 7
+#if (NODE_MAJOR_VERSION >= 10 && NODE_MINOR_VERSION >= 7) || NODE_MAJOR_VERSION >= 11
   // Initialize this addon to be context-aware. See Issue #11
   NODE_MODULE_INIT(/* exports, module, context */) {
       Init(exports, context);
